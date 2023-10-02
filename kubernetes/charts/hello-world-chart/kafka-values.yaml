@@ -1,0 +1,47 @@
+## Global Configuration
+global:
+  kafka:
+    bootstrapServers: "my-kafka.default.svc.cluster.local:9092"
+
+## Kafka Configuration
+replicaCount: 3
+
+image:
+  repository: bitnami/kafka
+  tag: latest
+  pullPolicy: IfNotPresent
+
+brokers:
+  heapOpts: "-Xmx1024m -Xms512m"
+
+
+service:
+  type: LoadBalancer
+  port: 9092
+
+authorizerClassName: "kafka.security.authorizer.AclAuthorizer"
+
+auth:
+  clientProtocol: sasl
+  externalClientProtocol: sasl
+  interBrokerProtocol: plaintext
+  sasl:
+    mechanisms: plain,scram-sha-256,scram-sha-512
+    interBrokerMechanism: plain
+    jaas:
+      clientUsers:
+        - kafkauser
+      clientPasswords:
+        - P@ssvv0rd
+
+
+topics:
+  - name: hello-topic
+    partitions: 1
+    replicationFactor: 1
+    # Add any other topic-level configurations you need here
+  - name: error-topic
+    partitions: 1
+    replicationFactor: 1
+    # Add any other topic-level configurations you need here
+
